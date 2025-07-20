@@ -19,37 +19,39 @@ class Database extends Config
      */
     public string $defaultGroup = 'default';
 
+    public array $default = [];
+
     /**
      * The default database connection.
      *
      * @var array<string, mixed>
      */
-    public array $default = [
-        'DSN'          => '',
-        'hostname'     => getenv('database.default.hostname'),
-    	'username'     => getenv('database.default.username'),
-    	'password'     => getenv('database.default.password'),
-    	'database'     => getenv('database.default.database'),
-    	'DBDriver'     => getenv('database.default.DBDriver'),
-        'DBPrefix'     => '',
-        'pConnect'     => false,
-        'DBDebug'      => true,
-        'charset'      => 'utf8mb4',
-        'DBCollat'     => 'utf8mb4_general_ci',
-        'swapPre'      => '',
-        'encrypt'      => false,
-        'compress'     => false,
-        'strictOn'     => false,
-        'failover'     => [],
-        'port'         => getenv('database.default.port'),
-        'numberNative' => false,
-        'foundRows'    => false,
-        'dateFormat'   => [
-            'date'     => 'Y-m-d',
-            'datetime' => 'Y-m-d H:i:s',
-            'time'     => 'H:i:s',
-        ],
-    ];
+    // public array $default = [
+    //     'DSN'          => '',
+    //     'hostname'     => getenv('database.default.hostname'),
+    // 	'username'     => getenv('database.default.username'),
+    // 	'password'     => getenv('database.default.password'),
+    // 	'database'     => getenv('database.default.database'),
+    // 	'DBDriver'     => getenv('database.default.DBDriver'),
+    //     'DBPrefix'     => '',
+    //     'pConnect'     => false,
+    //     'DBDebug'      => true,
+    //     'charset'      => 'utf8mb4',
+    //     'DBCollat'     => 'utf8mb4_general_ci',
+    //     'swapPre'      => '',
+    //     'encrypt'      => false,
+    //     'compress'     => false,
+    //     'strictOn'     => false,
+    //     'failover'     => [],
+    //     'port'         => getenv('database.default.port'),
+    //     'numberNative' => false,
+    //     'foundRows'    => false,
+    //     'dateFormat'   => [
+    //         'date'     => 'Y-m-d',
+    //         'datetime' => 'Y-m-d H:i:s',
+    //         'time'     => 'H:i:s',
+    //     ],
+    // ];
 
     //    /**
     //     * Sample database connection for SQLite3.
@@ -199,5 +201,32 @@ class Database extends Config
         if (ENVIRONMENT === 'testing') {
             $this->defaultGroup = 'tests';
         }
+
+        $this->default = [
+            'DSN'          => '',
+            'hostname'     => getenv('database.default.hostname'),
+            'username'     => getenv('database.default.username'),
+            'password'     => getenv('database.default.password'),
+            'database'     => getenv('database.default.database'),
+            'DBDriver'     => getenv('database.default.DBDriver'),
+            'DBPrefix'     => '',
+            'pConnect'     => false,
+            'DBDebug'      => true,
+            'charset'      => 'utf8mb4',
+            'DBCollat'     => 'utf8mb4_general_ci',
+            'swapPre'      => '',
+            'encrypt'      => false,
+            'compress'     => false,
+            'strictOn'     => false,
+            'failover'     => [],
+            'port'         => getenv('database.default.port') ?: 3306,
+            'numberNative' => false,
+            'foundRows'    => false,
+            'dateFormat'   => [
+                'date'     => 'Y-m-d',
+                'datetime' => 'Y-m-d H:i:s',
+                'time'     => 'H:i:s',
+            ],
+        ];
     }
 }
