@@ -14,13 +14,22 @@
 # ENVIRONMENT
 #--------------------------------------------------------------------
 
-CI_ENVIRONMENT = development
+CI_ENVIRONMENT = production
+database.default.hostname = 103.175.220.220
+database.default.database = kawanmasa_db
+database.default.username = kawanmasa_user
+database.default.password = StrongPassword123!
+database.default.DBDriver = MySQLi
+database.default.DBPrefix =
+database.default.port = 3306
+
+
 
 #--------------------------------------------------------------------
 # APP
 #--------------------------------------------------------------------
 
-# app.baseURL = ''
+app.baseURL = 'https://kawanmasa-atelier-a4e41d099687.herokuapp.com/'
 # If you have trouble with `.`, you could also use `_`.
 # app_baseURL = ''
 # app.forceGlobalSecureRequests = false
