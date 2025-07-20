@@ -3,8 +3,8 @@
 namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
-use CodeIgniter\Session\Handlers\BaseHandler;
-use CodeIgniter\Session\Handlers\FileHandler;
+use CodeIgniter\Session\Handlers\FileHandler; // Keep this if you want a local fallback
+use CodeIgniter\Session\Handlers\RedisHandler; // Make sure this is imported
 
 class Session extends BaseConfig
 {
@@ -12,23 +12,13 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      * Session Driver
      * --------------------------------------------------------------------------
-     *
-     * The session storage driver to use:
-     * - `CodeIgniter\Session\Handlers\FileHandler`
-     * - `CodeIgniter\Session\Handlers\DatabaseHandler`
-     * - `CodeIgniter\Session\Handlers\MemcachedHandler`
-     * - `CodeIgniter\Session\Handlers\RedisHandler`
-     *
-     * @var class-string<BaseHandler>
      */
-    public string $driver = FileHandler::class;
+    public string $driver = RedisHandler::class; // !!! IMPORTANT CHANGE HERE !!!
 
     /**
      * --------------------------------------------------------------------------
      * Session Cookie Name
      * --------------------------------------------------------------------------
-     *
-     * The session cookie name, must contain only [0-9a-z_-] characters
      */
     public string $cookieName = 'ci_session';
 
@@ -36,9 +26,6 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      * Session Expiration
      * --------------------------------------------------------------------------
-     *
-     * The number of SECONDS you want the session to last.
-     * Setting to 0 (zero) means expire when the browser is closed.
      */
     public int $expiration = 7200;
 
@@ -46,28 +33,13 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      * Session Save Path
      * --------------------------------------------------------------------------
-     *
-     * The location to save sessions to and is driver dependent.
-     *
-     * For the 'files' driver, it's a path to a writable directory.
-     * WARNING: Only absolute paths are supported!
-     *
-     * For the 'database' driver, it's a table name.
-     * Please read up the manual for the format with other session drivers.
-     *
-     * IMPORTANT: You are REQUIRED to set a valid save path!
      */
-    public string $savePath = WRITEPATH . 'session';
+    public ?string $savePath = null; // !!! IMPORTANT CHANGE HERE !!!
 
     /**
      * --------------------------------------------------------------------------
      * Session Match IP
      * --------------------------------------------------------------------------
-     *
-     * Whether to match the user's IP address when reading the session data.
-     *
-     * WARNING: If you're using the database driver, don't forget to update
-     *          your session table's PRIMARY KEY when changing this setting.
      */
     public bool $matchIP = false;
 
@@ -75,8 +47,6 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      * Session Time to Update
      * --------------------------------------------------------------------------
-     *
-     * How many seconds between CI regenerating the session ID.
      */
     public int $timeToUpdate = 300;
 
@@ -84,10 +54,6 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      * Session Regenerate Destroy
      * --------------------------------------------------------------------------
-     *
-     * Whether to destroy session data associated with the old session ID
-     * when auto-regenerating the session ID. When set to FALSE, the data
-     * will be later deleted by the garbage collector.
      */
     public bool $regenerateDestroy = false;
 
@@ -95,8 +61,6 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      * Session Database Group
      * --------------------------------------------------------------------------
-     *
-     * DB Group for the database session.
      */
     public ?string $DBGroup = null;
 
@@ -104,11 +68,6 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      * Lock Retry Interval (microseconds)
      * --------------------------------------------------------------------------
-     *
-     * This is used for RedisHandler.
-     *
-     * Time (microseconds) to wait if lock cannot be acquired.
-     * The default is 100,000 microseconds (= 0.1 seconds).
      */
     public int $lockRetryInterval = 100_000;
 
@@ -116,12 +75,35 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      * Lock Max Retries
      * --------------------------------------------------------------------------
-     *
-     * This is used for RedisHandler.
-     *
-     * Maximum number of lock acquisition attempts.
-     * The default is 300 times. That is lock timeout is about 30 (0.1 * 300)
-     * seconds.
      */
     public int $lockMaxRetries = 300;
+
+    // --- IMPORTANT: Add this constructor for Heroku Redis Cloud ---
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Check if on Heroku (by REDISCLOUD_URL) AND Redis driver is selected
+        if ($this->driver === RedisHandler::class && getenv('REDISCLOUD_URL')) {
+            $redisUrl = parse_url(getenv('REDISCLOUD_URL'));
+
+            if ($redisUrl) {
+                // Heroku Redis Cloud usually uses 'rediss' scheme for TLS.
+                // php-redis (the extension CI uses) expects 'tls' for encrypted connections.
+                $scheme = isset($redisUrl['scheme']) && $redisUrl['scheme'] === 'rediss' ? 'tls' : 'tcp';
+
+                $this->savePath = sprintf(
+                    '%s://%s:%d?auth=%s&timeout=5',
+                    $scheme,
+                    $redisUrl['host'],
+                    $redisUrl['port'],
+                    $redisUrl['pass'] ?? ''
+                );
+            }
+        } elseif ($this->driver === FileHandler::class) {
+            // Fallback for local development if you want to use file sessions there
+            // This assumes you might run it locally without REDISCLOUD_URL set.
+            $this->savePath = WRITEPATH . 'session';
+        }
+    }
 }
