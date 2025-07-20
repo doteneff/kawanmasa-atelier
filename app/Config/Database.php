@@ -26,11 +26,11 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'localhost',
-        'username'     => 'root',
-        'password'     => '',
-        'database'     => 'kawanmasa_atelier',
-        'DBDriver'     => 'MySQLi',
+        'hostname'     => getenv('database.default.hostname'),
+    	'username'     => getenv('database.default.username'),
+    	'password'     => getenv('database.default.password'),
+    	'database'     => getenv('database.default.database'),
+    	'DBDriver'     => getenv('database.default.DBDriver'),
         'DBPrefix'     => '',
         'pConnect'     => false,
         'DBDebug'      => true,
@@ -41,7 +41,7 @@ class Database extends Config
         'compress'     => false,
         'strictOn'     => false,
         'failover'     => [],
-        'port'         => 3306,
+        'port'         => getenv('database.default.port'),
         'numberNative' => false,
         'foundRows'    => false,
         'dateFormat'   => [
