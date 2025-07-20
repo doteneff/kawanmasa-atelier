@@ -25,6 +25,10 @@ class Auth extends BaseController
         $user = $userModel->where("email", $email)->first();
         if ($user && password_verify($password, $user["password"])) {
             session()->set('user_id', $user['id']);
+
+            // log to a file
+            file_put_contents(WRITEPATH . 'logs/session_test.log', json_encode(session()->get(), JSON_PRETTY_PRINT));
+
             return redirect()->to('/schedules');
         } else {
             return redirect()->back()->with('error','Invalid credentials');
