@@ -219,7 +219,7 @@ class Database extends Config
             'compress'     => false,
             'strictOn'     => false,
             'failover'     => [],
-            'port'         => getenv('database.default.port') ?: 3306,
+            'port'         => (int) (getenv('database.default.port')) ?: 3306,
             'numberNative' => false,
             'foundRows'    => false,
             'dateFormat'   => [
