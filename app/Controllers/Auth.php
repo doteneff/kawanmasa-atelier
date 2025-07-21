@@ -20,6 +20,13 @@ class Auth extends BaseController
     public function loginPost() {
         $email = $this->request->getPost("email");
         $password = $this->request->getPost("password");
+
+        if (empty($email) || empty($password)) {
+            return redirect()->back()->with('error', 'Email and password are required.');
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return redirect()->back()->with('error', 'Invalid email format.');
+        }
         
         $userModel = new UserModel();
         $user = $userModel->where("email", $email)->first();
