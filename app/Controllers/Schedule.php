@@ -15,7 +15,9 @@ class Schedule extends BaseController
     
     public function index()
     {
-        return view('schedules/index');
+        return view('schedules/index', [
+            'title' => 'Book Schedule'
+        ]);
     }
 
     public function getCalendarDateList(){

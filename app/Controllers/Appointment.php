@@ -19,6 +19,7 @@ class Appointment extends BaseController
         return view('appointments/index', [
             'appointments' => $data,
             'pager' => $this->appointmentModel->pager,
+            'title' => 'My Appointments - Kawanmasa Atelier'
         ]);
     }
 
@@ -31,6 +32,7 @@ class Appointment extends BaseController
 
         return view('reviews/view', [
             'appointment' => $appointment,
+            'title' => "View Review - Kawanmasa Atelier"
         ]);
     }
 
@@ -43,6 +45,7 @@ class Appointment extends BaseController
 
         return view('reviews/write', [
             'appointment' => $appointment,
+            'title'=> 'Write Review - Kawanmasa Atelier'
         ]);
     }
 
