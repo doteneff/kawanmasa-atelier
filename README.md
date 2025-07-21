@@ -1,49 +1,104 @@
-# CodeIgniter 4 Application Starter
+# 📸 Kawanmasa Atelier - Photography Booking Session Application
 
-## What is CodeIgniter?
+## ⚠️ Project Information
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+Kawanmasa Atelier is a web application built with **CodeIgniter 4 (PHP)** and **JavaScript** for booking photography session, managing appointments and collecting user reviews.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Users can book sessions, view their appointments, submit reviews, and view submitted reviews.  
+The app features a modern UI, authentication, and appointment status tracking.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+---
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## 💻 Setup Instructions
 
-## Installation & updates
+1. **Clone the repository**
+    ```bash
+    git clone https://github.com/doteneff/kawanmasa-atelier.git
+    cd kawanmasa-atelier
+    ```
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+2. **Install dependencies**
+    - Make sure you have [Composer](https://getcomposer.org/) installed.
+    ```bash
+    composer install
+    ```
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+3. **Configure your environment**
+    To run locally:
+    - First go to app/Config/App.php and change the baseURL to http://localhost:8080
+    - Next, edit value on app/Config/Database.php inside Construct to ENVIRONMENT === 'development'
+    - Additionally, on the same file edit $test array with details for your Database
+   
 
-## Setup
+4. **Prepare the database**
+    - Create a Database following your previous Database Detail 
+    - Run PHP Spark Script below to Migrate / Create Table
+    ```bash
+    php spark migrate
+    ```
+    - Run PHP Spark Script below to Seed Users and Schedule Data
+    ```bash
+    php spark db:seed StartSeeder
+    ```
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+---
 
-## Important Change with index.php
+## 🔑 Sample Login Credentials
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+> **Note:** Use the detail below login.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+- **Email:** `admin@gmail.com`
+- **Password:** `P@ssw0rd`
 
-**Please** read the user guide for a better explanation of how CI4 works!
+--- 
 
-## Repository Management
+## 🖥️ How to Run the Application Locally
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+1. **Start the built-in PHP server**
+    ```bash
+    php spark serve
+    ```
+    - The app will be available at [http://localhost:8080](http://localhost:8080) depending on the URL
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+2. **Login and use the app**
+    - Visit `/login` to access the login page.
+
+
+## ☁️ How to Run the Application on Cloud
+1. Open https://kawanmasa-atelier-a4e41d099687.herokuapp.com/
+2. Use the same credential for login
+3. Do the testing process
+
+---
+
+## 🤔 Assumptions Made
+
+- Only authenticated users can book appointments and submit reviews.
+- Each appointment can have only one review.
+- Appointments are considered "completed" if their date/time has passed.
+- Appointments are counted as "pending" if their date/time has not passed.
+- Reviews cannot be submitted for pending appointments.
+- The UI uses a shared header/topbar layout for consistency.
+- CSRF protection is enabled for all forms.
+
+---
+
+## 🧪 How to Run Tests
+
+TBA
+
+---
+
+## 💥 Additional Notes
+
+- The Application is Deployed on Heroku using Automatic Deployment from Github
+- The Database of the Application is being set up using VPS
+- The credential of the Database, baseURL, etc is being set up inside envVar of Cloud Portal (Heroku)
+
+**As the VPS requirement is quite low, please use the database wisely**
+**For more optimized experience, please clone and setup on local**
+**This app is not suitable for mobile as it does NOT mobile responsiveness nor mobile-friendly styling**
+**The rest of the app (Unit Test, More View Template, etc) will be updated at a later time**
+
+
+---
