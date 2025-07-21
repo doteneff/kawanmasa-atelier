@@ -168,10 +168,19 @@
       text-decoration: none;
       display: inline-block;
       min-width: 120px;
+      text-align: center;
     }
     .review-btn:hover {
       background: #a78bfa;
       transform: scale(1.03);
+    }
+    .review-btn.disabled {
+      background: #a78bfa;
+      color: #fff;
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 0.7;
+      transform: none;
     }
     .no-appointments {
       text-align: center;
@@ -240,7 +249,8 @@
                 $day = $dt->format('d');
                 $monthYear = $dt->format('F Y');
                 $time = $dt->format('H:i');
-                $isReviewed = ($appointment['status'] === 'completed' && $appointment['has_review']);
+                $isPending = ($appointment['status'] === 'pending') ? true : false;
+                $isReviewed = !empty($appointment['has_review']);
                 $isUnreviewed = !$isReviewed;
             ?>
                 <div class="appointment-item <?= $isUnreviewed ? 'unreviewed' : '' ?>">
@@ -253,7 +263,7 @@
                     <div class="appointment-status <?= $isUnreviewed ? 'unreviewed' : 'reviewed' ?>">
                         <?= $isReviewed ? 'Reviewed' : 'Unreviewed' ?>
                     </div>
-                    <a class="review-btn" href="/review/<?= $isReviewed ? 'view' : 'write' ?>/<?= $appointment['id'] ?>">
+                    <a class="review-btn<?= $isPending ? ' disabled' : '' ?>" href="<?= $isPending ? '#' : "/review/" . ($isReviewed ? 'view' : 'write') . "/{$appointment['id']}" ?>">
                         <?= $isReviewed ? 'View Review' : 'Write Review' ?>
                     </a>
                 </div>
