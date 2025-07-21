@@ -25,7 +25,7 @@ class CreateUsers extends Migration
             ],
             "password"=> [
                 "type"=> "VARCHAR",
-                "constraint"=> 50,
+                "constraint"=> 255,
             ]
         ]);
         $this->forge->addKey("id", true);
